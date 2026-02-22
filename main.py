@@ -26,8 +26,6 @@ async def check_battery():
 async def before_check_battery():
     await bot.wait_until_ready()
 
-check_battery.start()
-
 # --- 1. SETUP & STORAGE ---
 load_dotenv()
 intents = discord.Intents.default()
@@ -54,6 +52,10 @@ custom_commands = load_custom_commands()
 
 @bot.event
 async def on_ready():
+    # START THE BATTERY TASK HERE (Prevents the crash)
+    if not check_battery.is_running():
+        check_battery.start()
+
     await bot.change_presence(activity=discord.Activity(
         type=discord.ActivityType.playing, 
         name="Breaking Bad 🎩 wait that's a tophat"
@@ -112,7 +114,6 @@ async def on_message(message):
 async def pull(ctx):
     if ctx.author.id != 812400570680737853: return
 
-    import subprocess
     try:
         subprocess.run(["git", "fetch"], check=True)
         stats = subprocess.check_output(
@@ -197,6 +198,7 @@ async def unwarn(ctx, member: discord.Member):
     w_role = ctx.guild.get_role(1475171888513679441)
     try:
         if w_role in member.roles: await member.remove_roles(w_role)
+        await member.add_roles(w_role)
         await ctx.send(f"✅ **{member.display_name}** has been unwarned!")
     except Exception as e: await ctx.send(f"❌ Error: {e}")
 

@@ -6,6 +6,27 @@ import os
 import asyncio
 import time
 from dotenv import load_dotenv
+import subprocess
+from discord.ext import tasks
+
+OWNER_ID = 812400570680737853 
+
+@tasks.loop(minutes=5)
+async def check_battery():
+    try:
+        result = subprocess.check_output(["upower", "-i", "/org/freedesktop/UPower/devices/battery_display"], text=True)
+
+        if "state:               discharging" in result:
+            user = await bot.fetch_user(OWNER_ID)
+            await user.send("⚠️ Hey there, looks like your computer is unplugged... I'm gonna die if you don't plug it back in soon")
+    except Exception as e:
+        print(f"Battery check failed: {e}")
+
+@check_battery.before_loop
+async def before_check_battery():
+    await bot.wait_until_ready()
+
+check_battery.start()
 
 # --- 1. SETUP & STORAGE ---
 load_dotenv()

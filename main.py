@@ -140,6 +140,18 @@ async def say(ctx, target_channel: discord.TextChannel = None, *, message: str):
 
 @bot.command()
 @commands.has_role("MODERATOR")
+async def deletecmd(ctx, name: str):
+    """Deletes a custom command."""
+    name = name.lower()
+    if name in custom_commands:
+        del custom_commands[name]
+        save_custom_commands(custom_commands)
+        await ctx.send(f"🗑️ Command `.{name}` has been thrown into the void for all of eternity.")
+    else:
+        await ctx.send(f"❌ No command named `.{name}`.")
+
+@bot.command()
+@commands.has_role("MODERATOR")
 async def verified(ctx, member: discord.Member):
     u_role = ctx.guild.get_role(1472996575532814571)
     v_role = ctx.guild.get_role(1472995242335801364)

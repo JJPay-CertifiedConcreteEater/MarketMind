@@ -1,0 +1,5 @@
+.env
+custom_commands.json
+pull_signal.txt
+__pycache__/
+*.log

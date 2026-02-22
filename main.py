@@ -162,6 +162,24 @@ async def verified(ctx, member: discord.Member):
     except Exception as e: await ctx.send(f"❌ Error: {e}")
 
 @bot.command()
+@commands.has_role("MODERATOR")
+async def warn(ctx, member: discord.Member):
+    w_role = ctx.guild.get_role(1475171888513679441)
+    try:
+        await member.add_roles(w_role)
+        await ctx.send(f"✅ **{member.display_name}** has been warned. If you do not stop what you are doing, you will be warned one more time as a placeholder before you get either timeout, kicked, or banned at a mod's choice.")
+    except Exception as e: await ctx.send(f"❌ Error: {e}")
+
+@bot.command()
+@commands.has_role("MODERATOR")
+async def unwarn(ctx, member: discord.Member):
+    w_role = ctx.guild.get_role(1475171888513679441)
+    try:
+        if w_role in member.roles: await member.remove_roles(w_role)
+        await ctx.send(f"✅ **{member.display_name}** has been unwarned!")
+    except Exception as e: await ctx.send(f"❌ Error: {e}")
+
+@bot.command()
 @commands.has_permissions(moderate_members=True)
 async def timeout(ctx, member: discord.Member, minutes: int, *, reason: str = "No reason provided"):
     if minutes > 40320: return await ctx.send("Way too long 28 days is the limit L bozo")

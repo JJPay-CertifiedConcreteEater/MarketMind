@@ -11,7 +11,7 @@ from discord.ext import tasks
 
 OWNER_ID = 812400570680737853 
 
-@tasks.loop(minutes=5)
+@tasks.loop(minutes=1)
 async def check_battery():
     try:
         result = subprocess.check_output(["upower", "-i", "/org/freedesktop/UPower/devices/battery_display"], text=True)

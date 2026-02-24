@@ -101,18 +101,30 @@ async def on_member_join(member):
 async def on_message(message):
     if message.author.bot: return
 
-    # --- BOT TRAP LOGIC ---
-    BAIT_CHANNEL_ID = 1475630628144808068 
+    BAIT_CHANNEL_ID = 1475630628144808068
+    JAIL_ROLE_ID = 1475967331879616532
+    APPEAL_CHANNEL_ID = 1475967694971994112
+    
     if message.channel.id == BAIT_CHANNEL_ID and message.author.id != OWNER_ID:
         try:
-            await message.author.send(f"🚫 You have been banned from Marketpro Lounge for posting in #bot-bait. If you believe this was a mistake, reply to this DM to appeal.")
-            await message.author.ban(reason="Bot-Trap: Posted in forbidden channel.")
+            jail_role = message.guild.get_role(JAIL_ROLE_ID)
+            if jail_role:
+                await message.author.add_roles(jail_role)
+            
+            await message.delete()
+            
+            appeal_channel = bot.get_channel(APPEAL_CHANNEL_ID)
+            if appeal_channel:
+                await appeal_channel.send(
+                    f"⚠️ {message.author.mention}, you've been restricted for posting in #bot-bait. "
+                    "If this was a mistake, appeal here or reply to the DM sent to appeal to the mods. IF YOU DO NOT"
+                )
             return
-        except: pass
+        except Exception as e:
+            print(f"Jail failed: {e}")
 
-    # --- DM FORWARDER (APPEALS) ---
     if isinstance(message.channel, discord.DMChannel):
-        LOG_CHANNEL_ID = 1472985776525676678 
+        LOG_CHANNEL_ID = 1473490901614727343 
         channel = bot.get_channel(LOG_CHANNEL_ID)
         if channel:
             embed = discord.Embed(title="📩 New Appeal/DM", description=message.content, color=discord.Color.orange())

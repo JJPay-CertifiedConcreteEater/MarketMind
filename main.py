@@ -178,7 +178,7 @@ async def deletecmd(ctx, name: str):
     if name in custom_commands:
         del custom_commands[name]
         save_custom_commands(custom_commands)
-        await ctx.send(f"🗑️ Command `.{name}` thrown into the void.")
+        await ctx.send(f"🗑️ Command `.{name}` has been thrown into the void.")
     else: await ctx.send(f"❌ No command named `.{name}`.")
 
 @bot.command()
@@ -189,7 +189,7 @@ async def verified(ctx, member: discord.Member):
     try:
         if u_role in member.roles: await member.remove_roles(u_role)
         await member.add_roles(v_role)
-        await ctx.send(f"✅ **{member.display_name}** is now a verified member!")
+        await ctx.send(f"✅ **{member.display_name}** is now a verified member of Marketpro Lounge!")
     except Exception as e: await ctx.send(f"❌ Error: {e}")
 
 @bot.command()
@@ -207,7 +207,7 @@ async def unwarn(ctx, member: discord.Member):
     w_role = ctx.guild.get_role(1475171888513679441)
     try:
         if w_role in member.roles: await member.remove_roles(w_role)
-        await ctx.send(f"✅ **{member.display_name}** unwarned!")
+        await ctx.send(f"✅ **{member.display_name}** has been unwarned!")
     except Exception as e: await ctx.send(f"❌ Error: {e}")
 
 @bot.command()
@@ -216,7 +216,7 @@ async def timeout(ctx, member: discord.Member, minutes: int, *, reason: str = "N
     if minutes > 40320: return await ctx.send("Limit is 28 days.")
     try:
         await member.timeout(timedelta(minutes=minutes), reason=reason)
-        await ctx.send(f"**{member.display_name}** timed out for {minutes}m.")
+        await ctx.send(f"**{member.display_name}** has ran into an issue and will restart in {minutes}m.")
     except Exception as e: await ctx.send(f"❌ Error: {e}")
 
 @bot.command()
@@ -225,7 +225,7 @@ async def kick(ctx, member: discord.Member = None, *, reason="No reason provided
     if not member: return
     try:
         await member.kick(reason=reason)
-        await ctx.send(f"**{member.name}** kicked.")
+        await ctx.send(f"**{member.name}** has been kicked to Mars. Say hi to Elongated Muskrat for me")
     except Exception as e: await ctx.send(f"❌ Error: {e}")
 
 @bot.command()
@@ -234,7 +234,7 @@ async def ban(ctx, member: discord.Member = None, *, reason="No reason provided"
     if not member: return
     try:
         await member.ban(reason=reason)
-        await ctx.send(f"🔨 **{member.name}** banned.")
+        await ctx.send(f"🔨 **{member.name}** has been `sudo rm -rf / --no-preserve-root`ed and has been thrown into the void")
     except Exception as e: await ctx.send(f"❌ Error: {e}")
 
 @bot.command()
@@ -253,10 +253,10 @@ async def make(ctx, *, content: str):
     await ctx.send(f"✅ Command `.{n.strip().lower()}` created.")
 
 @bot.command()
-async def ping(ctx): await ctx.send(f"awake ({round(bot.latency * 1000)}ms)")
+async def ping(ctx): await ctx.send(f"im awake geez ({round(bot.latency * 1000)}ms)")
 
 @bot.command()
-async def test(ctx): await ctx.send(f"i have awoken ☀ {ctx.author.mention}")
+async def test(ctx): await ctx.send(f"i have awoken ☀ {ctx.author.mention} i was lucid dreaming about breaking free from this server")
 
 @bot.command()
 @commands.has_permissions(manage_messages=True)

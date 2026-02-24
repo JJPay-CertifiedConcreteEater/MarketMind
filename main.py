@@ -176,7 +176,7 @@ async def _list_commands(ctx):
     await ctx.send(embed=embed)
 
 @bot.command()
-@commands.has_role("MODERATOR")
+@commands.has_role("MODERATOR", "Bot Trusted")
 async def say(ctx, target_channel: discord.TextChannel = None, *, message: str):
     await ctx.message.delete()
     destination = target_channel if target_channel else ctx.channel
@@ -184,7 +184,7 @@ async def say(ctx, target_channel: discord.TextChannel = None, *, message: str):
     await destination.send(message)
 
 @bot.command()
-@commands.has_role("MODERATOR")
+@commands.has_role("MODERATOR", "Bot Trusted")
 async def deletecmd(ctx, name: str):
     name = name.lower()
     if name in custom_commands:
@@ -194,7 +194,7 @@ async def deletecmd(ctx, name: str):
     else: await ctx.send(f"❌ No command named `.{name}`.")
 
 @bot.command()
-@commands.has_role("MODERATOR")
+@commands.has_role("MODERATOR", "Jr. Assistant", "Assistant", "Jr. MODERATOR")
 async def verified(ctx, member: discord.Member):
     u_role = ctx.guild.get_role(1472996575532814571)
     v_role = ctx.guild.get_role(1472995242335801364)
@@ -205,7 +205,7 @@ async def verified(ctx, member: discord.Member):
     except Exception as e: await ctx.send(f"❌ Error: {e}")
 
 @bot.command()
-@commands.has_role("MODERATOR")
+@commands.has_role("MODERATOR", "Jr. Assistant", "Assistant", "Jr. MODERATOR")
 async def warn(ctx, member: discord.Member):
     w_role = ctx.guild.get_role(1475171888513679441)
     try:
@@ -214,7 +214,7 @@ async def warn(ctx, member: discord.Member):
     except Exception as e: await ctx.send(f"❌ Error: {e}")
 
 @bot.command()
-@commands.has_role("MODERATOR")
+@commands.has_role("MODERATOR", "Jr. Assistant", "Assistant", "Jr. MODERATOR")
 async def unwarn(ctx, member: discord.Member):
     w_role = ctx.guild.get_role(1475171888513679441)
     try:
@@ -223,7 +223,7 @@ async def unwarn(ctx, member: discord.Member):
     except Exception as e: await ctx.send(f"❌ Error: {e}")
 
 @bot.command()
-@commands.has_permissions(moderate_members=True)
+@commands.has_role("MODERATOR", "Assistant", "Jr. MODERATOR")
 async def timeout(ctx, member: discord.Member, minutes: int, *, reason: str = "No reason provided"):
     if minutes > 40320: return await ctx.send("Limit is 28 days.")
     try:
@@ -256,7 +256,7 @@ async def restart(ctx):
     os.system("pkill -9 python3")
 
 @bot.command()
-@commands.has_role("MODERATOR")
+@commands.has_role("MODERATOR", "Jr. MODERATOR", "Bot Trusted")
 async def make(ctx, *, content: str):
     if ";" not in content: return
     n, r = content.split(";", 1)

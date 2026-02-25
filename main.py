@@ -117,7 +117,7 @@ async def on_message(message):
             if appeal_channel:
                 await appeal_channel.send(
                     f"⚠️ {message.author.mention}, you've been restricted for posting in #bot-bait. "
-                    "If this was a mistake, appeal here or reply to the DM sent to appeal to the mods. IF YOU DO NOT"
+                    "If this was a mistake, appeal here or reply to the DM sent to appeal to the mods. **IF YOU DO NOT SOON THEN A MODERATOR WILL SEE THAT YOU HAVEN'T APPEALED AND WILL BAN YOU!**"
                 )
             return
         except Exception as e:

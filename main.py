@@ -246,7 +246,7 @@ async def unwarn(ctx, member: discord.Member):
 @bot.command()
 @commands.has_any_role("MODERATOR", "Jr. MODERATOR")
 async def blacklist(ctx, member: discord.Member):
-    j_role = ctx.guild.get_role(1475171888513679441)
+    j_role = ctx.guild.get_role(1475967331879616532)
     try:
         await member.add_roles(j_role)
         await ctx.send(f"✅ **{member.display_name}** has been locked to the appeals channel.")

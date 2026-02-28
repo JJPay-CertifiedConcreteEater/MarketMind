@@ -112,12 +112,18 @@ async def on_message(message):
                 await message.author.add_roles(jail_role)
             
             await message.delete()
+
+        try:
+            await member.send(f"⚠️ Hey there, this DM is to let you know you have been blacklisted in Marketpro Lounge, which means you have been locked to the appeals channel at the moment. This is to give you a chance to appeal before a punishment takes place. \nIf you would like to appeal before your punishment, do so now by replying to this DM, or in the #appeals channel in the server. **IF YOU DO NOT APPEAL SOON THEN A MODERATOR WILL SEE THAT YOU HAVEN'T APPEALED YET AND WILL PUNISH YOU!**")
+            await ctx.send(f"✅ Message sent to **{member}**.")
+        except Exception as e:
+            await ctx.send(f"❌ Failed to DM user: {e}")
             
             appeal_channel = bot.get_channel(APPEAL_CHANNEL_ID)
             if appeal_channel:
                 await appeal_channel.send(
-                    f"⚠️ {message.author.mention}, you've been restricted from the server. "
-                    "If you believe this was a mistake, or you would just like to appeal, appeal here or reply (not just text, reply) to the DM sent to appeal to the mods. **IF YOU DO NOT SOON THEN A MODERATOR WILL SEE THAT YOU HAVEN'T APPEALED AND WILL EITHER KICK OR BAN YOU!**"
+                    f"⚠️ {message.author.mention}, you have been blacklisted, which means you have been locked to the appeals channel at the moment. This is to give you a chance to appeal before a punishment takes place."
+                    "If you would like to appeal before your punishment, do so now right here, or reply to the DM that was (hopefully) sent. **IF YOU DO NOT APPEAL SOON THEN A MODERATOR WILL SEE THAT YOU HAVEN'T APPEALED YET AND WILL PUNISH YOU!**"
                 )
             return
         except Exception as e:
@@ -230,6 +236,15 @@ async def unwarn(ctx, member: discord.Member):
     try:
         if w_role in member.roles: await member.remove_roles(w_role)
         await ctx.send(f"✅ **{member.display_name}** has been unwarned!")
+    except Exception as e: await ctx.send(f"❌ Error: {e}")
+
+@bot.command()
+@commands.has_any_role("MODERATOR", "Jr. MODERATOR")
+async def blacklist(ctx, member: discord.Member):
+    j_role = ctx.guild.get_role(1475171888513679441)
+    try:
+        await member.add_roles(j_role)
+        await ctx.send(f"✅ **{member.display_name}** has been locked to the appeals channel.")
     except Exception as e: await ctx.send(f"❌ Error: {e}")
 
 @bot.command()

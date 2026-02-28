@@ -143,14 +143,24 @@ async def on_message(message):
 
 @bot.command()
 @commands.has_role("MODERATOR")
-async def dm(ctx, member: discord.User, *, content: str):
+async def dmasbot(ctx, member: discord.User, *, content: str):
+    """DMs a user through the bot."""
+    try:
+        await member.send(f"{content}")
+        await ctx.send(f"✅ Message sent to **{member}**.")
+    except Exception as e:
+        await ctx.send(f"❌ Failed to DM user: {e}")
+
+@bot.command()
+@commands.has_role("MODERATOR")
+async def dmbymod(ctx, member: discord.User, *, content: str):
     """DMs a user through the bot."""
     try:
         await member.send(f"💬 **Message from Marketpro Mods:**\n{content}")
         await ctx.send(f"✅ Message sent to **{member}**.")
     except Exception as e:
         await ctx.send(f"❌ Failed to DM user: {e}")
-
+        
 @bot.command()
 async def pull(ctx):
     if ctx.author.id != 812400570680737853: return

@@ -110,25 +110,29 @@ async def on_message(message):
             jail_role = message.guild.get_role(JAIL_ROLE_ID)
             if jail_role:
                 await message.author.add_roles(jail_role)
-            
+   
             await message.delete()
 
-        try:
-            await member.send(f"⚠️ Hey there, this DM is to let you know you have been blacklisted in Marketpro Lounge, which means you have been locked to the appeals channel at the moment. This is to give you a chance to appeal before a punishment takes place. \nIf you would like to appeal before your punishment, do so now by replying to this DM, or in the #appeals channel in the server. **IF YOU DO NOT APPEAL SOON THEN A MODERATOR WILL SEE THAT YOU HAVEN'T APPEALED YET AND WILL PUNISH YOU!**")
-            await ctx.send(f"✅ Message sent to **{member}**.")
-        except Exception as e:
-            await ctx.send(f"❌ Failed to DM user: {e}")
-            
+            try:
+                await message.author.send(
+                    f"⚠️ Hey there, this DM is to let you know you have been blacklisted in Marketpro Lounge. "
+                    "You have been locked to the appeals channel. This is your chance to appeal before a punishment takes place."
+                    "Reply to this DM or post in the #appeals channel. **IF YOU DO NOT APPEAL SOON, A MODERATOR WILL PUNISH YOU!**"
+                )
+            except:
+                pass
+        
             appeal_channel = bot.get_channel(APPEAL_CHANNEL_ID)
             if appeal_channel:
                 await appeal_channel.send(
-                    f"⚠️ {message.author.mention}, you have been blacklisted, which means you have been locked to the appeals channel at the moment. This is to give you a chance to appeal before a punishment takes place."
-                    "If you would like to appeal before your punishment, do so now right here, or reply to the DM that was (hopefully) sent. **IF YOU DO NOT APPEAL SOON THEN A MODERATOR WILL SEE THAT YOU HAVEN'T APPEALED YET AND WILL PUNISH YOU!**"
+                    f"⚠️ {message.author.mention}, you have been blacklisted and locked here. "
+                    "Explain yourself now or reply to the DM sent. **IF YOU DO NOT APPEAL SOON, A MODERATOR WILL PUNISH YOU!**"
                 )
-            return
+            return 
         except Exception as e:
             print(f"Jail failed: {e}")
 
+    # --- DM FORWARDER ---
     if isinstance(message.channel, discord.DMChannel):
         LOG_CHANNEL_ID = 1473490901614727343 
         channel = bot.get_channel(LOG_CHANNEL_ID)
@@ -138,6 +142,7 @@ async def on_message(message):
             await channel.send(embed=embed)
         return
 
+    # --- CUSTOM COMMANDS & REGULAR COMMANDS ---
     if message.content.startswith("."):
         trigger = message.content[1:].split(" ")[0].lower()
         if trigger in custom_commands:

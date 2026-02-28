@@ -1,6 +1,6 @@
 # MarketMind 🎩
-Made by JJPay
-An "advanced" Discord utility bot for Marketpro Lounge.
+* *Made by* 𝙅𝙅𝙋𝘼𝙔
+* An "advanced" Discord utility bot for Marketpro Lounge.
 
 ## Notes
 * **This bot is in Python**

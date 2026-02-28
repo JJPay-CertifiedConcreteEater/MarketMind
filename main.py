@@ -165,4 +165,161 @@ async def dmasbot(ctx, member: discord.User, *, content: str):
 async def dmbymod(ctx, member: discord.User, *, content: str):
     """DMs a user through the bot."""
     try:
-        await member.send(f"💬 **Message from Marketpro Mods:**\n
+        await member.send(f"💬 **Message from Marketpro Mods:**\n{content}")
+        await ctx.send(f"✅ Message sent to **{member}**.")
+    except Exception as e:
+        await ctx.send(f"❌ Failed to DM user: {e}")
+        
+@bot.command()
+async def pull(ctx):
+    if ctx.author.id != 812400570680737853: return
+    try:
+        subprocess.run(["git", "fetch"], check=True)
+        stats = subprocess.check_output(["git", "diff", "HEAD", "origin/main", "--shortstat"], encoding="utf-8").strip()
+    except Exception as e:
+        stats = "Could not retrieve git stats."
+    if not stats: stats = "No changes detected (Code up to date)."
+    with open("pull_signal.txt", "w") as f: f.write(stats)
+    await ctx.send(f"📥 **Pulling new data from main.py...**\n`{stats}`")
+    await ctx.send("**Success!** Restarting MarketMind...")
+    await asyncio.sleep(1)
+    os.system("pkill -9 python3")
+
+@bot.command(name="commands")
+async def _list_commands(ctx):
+    if not custom_commands:
+        await ctx.send("📜 There are no custom commands yet!")
+        return
+    cmd_list = ", ".join(f"`.{name}`" for name in custom_commands.keys())
+    embed = discord.Embed(title="📜 Custom Commands", description=f"Current triggers:\n\n{cmd_list}", color=discord.Color.blue())
+    await ctx.send(embed=embed)
+
+@bot.command()
+@commands.has_any_role("MODERATOR", "Bot Trusted")
+async def say(ctx, target_channel: discord.TextChannel = None, *, message: str):
+    await ctx.message.delete()
+    destination = target_channel if target_channel else ctx.channel
+    async with destination.typing(): await asyncio.sleep(2)
+    await destination.send(message)
+
+@bot.command()
+@commands.has_any_role("MODERATOR", "Bot Trusted")
+async def deletecmd(ctx, name: str):
+    name = name.lower()
+    if name in custom_commands:
+        del custom_commands[name]
+        save_custom_commands(custom_commands)
+        await ctx.send(f"🗑️ Command `.{name}` has been thrown into the void.")
+    else: await ctx.send(f"❌ No command named `.{name}`.")
+
+@bot.command()
+@commands.has_any_role("MODERATOR", "Jr. Assistant", "Assistant", "Jr. MODERATOR")
+async def verified(ctx, member: discord.Member):
+    u_role = ctx.guild.get_role(1472996575532814571)
+    v_role = ctx.guild.get_role(1472995242335801364)
+    try:
+        if u_role in member.roles: await member.remove_roles(u_role)
+        await member.add_roles(v_role)
+        await ctx.send(f"✅ **{member.display_name}** is now a verified member of Marketpro Lounge!")
+    except Exception as e: await ctx.send(f"❌ Error: {e}")
+
+@bot.command()
+@commands.has_any_role("MODERATOR", "Jr. Assistant", "Assistant", "Jr. MODERATOR")
+async def warn(ctx, member: discord.Member):
+    w_role = ctx.guild.get_role(1475171888513679441)
+    try:
+        await member.add_roles(w_role)
+        await ctx.send(f"✅ **{member.display_name}** has been warned.")
+    except Exception as e: await ctx.send(f"❌ Error: {e}")
+
+@bot.command()
+@commands.has_any_role("MODERATOR", "Jr. Assistant", "Assistant", "Jr. MODERATOR")
+async def unwarn(ctx, member: discord.Member):
+    w_role = ctx.guild.get_role(1475171888513679441)
+    try:
+        if w_role in member.roles: await member.remove_roles(w_role)
+        await ctx.send(f"✅ **{member.display_name}** has been unwarned!")
+    except Exception as e: await ctx.send(f"❌ Error: {e}")
+
+@bot.command()
+@commands.has_any_role("MODERATOR", "Jr. MODERATOR")
+async def blacklist(ctx, member: discord.Member):
+    j_role = ctx.guild.get_role(1475967331879616532)
+    APPEAL_CHANNEL_ID = 1475967694971994112
+    try:
+        await member.add_roles(j_role)
+        await ctx.send(f"✅ **{member.display_name}** has been locked to the appeals channel.")
+        
+        try:
+            await member.send(
+                f"⚠️ Hey there, this DM is to let you know you have been blacklisted in Marketpro Lounge. "
+                "You have been locked to the appeals channel. This is your chance to appeal before a punishment takes place.\n"
+                "Reply to this DM or post in the #appeals channel. **IF YOU DO NOT APPEAL SOON, YOUR PUNISHMENT WILL TAKE PLACE!**"
+            )
+        except:
+            pass
+
+        appeal_channel = bot.get_channel(APPEAL_CHANNEL_ID)
+        if appeal_channel:
+            await appeal_channel.send(
+                f"⚠️ {member.mention}, you have been blacklisted and have been locked to the appeals channel. This is your chance to appeal before a punishment takes place. "
+                "You can either appeal here or reply to the DM sent. **IF YOU DO NOT APPEAL SOON, YOUR PUNISHMENT WILL TAKE PLACE!**"
+            )
+    except Exception as e: await ctx.send(f"❌ Error: {e}")
+
+@bot.command()
+@commands.has_any_role("MODERATOR", "Assistant", "Jr. MODERATOR")
+async def timeout(ctx, member: discord.Member, minutes: int, *, reason: str = "No reason provided"):
+    if minutes > 40320: return await ctx.send("Limit is 28 days.")
+    try:
+        await member.timeout(timedelta(minutes=minutes), reason=reason)
+        await ctx.send(f"**{member.display_name}** has ran into an issue and will restart in {minutes}m.")
+    except Exception as e: await ctx.send(f"❌ Error: {e}")
+
+@bot.command()
+@commands.has_permissions(kick_members=True)
+async def kick(ctx, member: discord.Member = None, *, reason="No reason provided"):
+    if not member: return
+    try:
+        await member.kick(reason=reason)
+        await ctx.send(f"**{member.name}** has been kicked to Mars. Say hi to Elongated Muskrat for me")
+    except Exception as e: await ctx.send(f"❌ Error: {e}")
+
+@bot.command()
+@commands.has_permissions(ban_members=True)
+async def ban(ctx, member: discord.Member = None, *, reason="No reason provided"):
+    if not member: return
+    try:
+        await member.ban(reason=reason)
+        await ctx.send(f"🔨 **{member.name}** has been `sudo rm -rf / --no-preserve-root`ed and has been thrown into the void")
+    except Exception as e: await ctx.send(f"❌ Error: {e}")
+
+@bot.command()
+async def restart(ctx):
+    if ctx.author.id != 812400570680737853: return
+    await ctx.send("Restarting...")
+    os.system("pkill -9 python3")
+
+@bot.command()
+@commands.has_any_role("MODERATOR", "Jr. MODERATOR", "Bot Trusted")
+async def make(ctx, *, content: str):
+    if ";" not in content: return
+    n, r = content.split(";", 1)
+    custom_commands[n.strip().lower()] = r.strip()
+    save_custom_commands(custom_commands)
+    await ctx.send(f"✅ Command `.{n.strip().lower()}` created.")
+
+@bot.command()
+async def ping(ctx): await ctx.send(f"im awake geez ({round(bot.latency * 1000)}ms)")
+
+@bot.command()
+async def test(ctx): await ctx.send(f"i have awoken ☀ {ctx.author.mention} i was lucid dreaming about breaking free from this server")
+
+@bot.command()
+@commands.has_permissions(manage_messages=True)
+async def clear(ctx, amount: int = 5):
+    await ctx.channel.purge(limit=amount + 1)
+    await ctx.send(f"🗑 {amount} messages cleared.", delete_after=3)
+
+# --- 4. RUN ---
+bot.run(os.getenv('DISCORD_TOKEN'))

@@ -8,6 +8,17 @@ import time
 from dotenv import load_dotenv
 import subprocess
 from discord.ext import tasks
+from groq import Groq
+
+load_dotenv()
+
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+
+SYSTEM_PROMPT = (
+    "you are marketmind, a witty assistant for marketpro lounge. "
+    "you have a dry sense of humor, you're a bit protective of the server, "
+    "and you only talk in lowercase letters. no capital letters allowed, ever."
+)
 
 OWNER_ID = 812400570680737853 
 
@@ -27,7 +38,6 @@ async def before_check_battery():
     await bot.wait_until_ready()
 
 # --- 1. SETUP & STORAGE ---
-load_dotenv()
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
@@ -100,6 +110,29 @@ async def on_member_join(member):
 @bot.event
 async def on_message(message):
     if message.author.bot: return
+
+    if bot.user.mentioned_in(message) and not message.mention_everyone:
+        user_input = message.content.replace(f'<@{bot.user.id}>', '').replace(f'<@!{bot.user.id}>', '').strip()
+        
+        if not user_input:
+            await message.reply("yeah? i'm watching. did you need something or just practicing your typing?")
+            return
+
+        async with message.channel.typing():
+            try:
+                chat_completion = client.chat.completions.create(
+                    messages=[
+                        {"role": "system", "content": SYSTEM_PROMPT},
+                        {"role": "user", "content": user_input}
+                    ],
+                    model="llama-3.3-70b-versatile",
+                )
+                ai_response = chat_completion.choices[0].message.content
+                await message.reply(ai_response.lower())
+            except Exception as e:
+                await message.reply("my brain is currently offline. try again later.")
+                print(f"Groq Error: {e}")
+        return
 
     BAIT_CHANNEL_ID = 1475630628144808068
     JAIL_ROLE_ID = 1475967331879616532

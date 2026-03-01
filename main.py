@@ -99,7 +99,7 @@ async def on_ready():
             os.remove("pull_signal.txt")
             
             latency = round(bot.latency * 1000)
-            LOG_CHANNEL_ID = 1473490901614727343 
+            LOG_CHANNEL_ID = 1477664682599776418 
             channel = bot.get_channel(LOG_CHANNEL_ID) or await bot.fetch_channel(LOG_CHANNEL_ID)
             
             if channel:
@@ -203,6 +203,58 @@ async def on_message(message):
             await message.channel.send(custom_commands[trigger])
             return
     await bot.process_commands(message)
+
+@bot.event
+async def on_message_delete(message):
+    if message.author.bot: return
+    
+    LOG_CHANNEL_ID = 1477664682599776418
+    log_channel = bot.get_channel(LOG_CHANNEL_ID)
+    
+    if log_channel:
+        embed = discord.Embed(
+            title="🗑️ Message Deleted",
+            description=f"**Author:** {message.author.mention} | {message.author}\n**Channel:** {message.channel.mention}",
+            color=discord.Color.red(),
+            timestamp=discord.utils.utcnow()
+        )
+        embed.add_field(name="Content:", value=message.content or "[no text content]", inline=False)
+        embed.set_footer(text=f"User ID: {message.author.id}")
+        await log_channel.send(embed=embed)
+
+@bot.event
+async def on_message_edit(before, after):
+    if before.author.bot or before.content == after.content: return
+    
+    LOG_CHANNEL_ID = 1477664682599776418
+    log_channel = bot.get_channel(LOG_CHANNEL_ID)
+    
+    if log_channel:
+        embed = discord.Embed(
+            title="✏️ Message Edited",
+            description=f"**Author:** {before.author.mention}\n**Channel:** {before.channel.mention}",
+            color=discord.Color.blue(),
+            timestamp=discord.utils.utcnow()
+        )
+        embed.add_field(name="Before:", value=before.content, inline=False)
+        embed.add_field(name="After:", value=after.content, inline=False)
+        await log_channel.send(embed=embed)
+
+@bot.event
+async def on_member_update(before, after):
+    LOG_CHANNEL_ID = 1477664682599776418
+    log_channel = bot.get_channel(LOG_CHANNEL_ID)
+    
+    if log_channel and before.display_name != after.display_name:
+        embed = discord.Embed(
+            title="📛 Name Change",
+            description=f"{after.mention} updated their profile.",
+            color=discord.Color.gold(),
+            timestamp=discord.utils.utcnow()
+        )
+        embed.add_field(name="Old Name:", value=before.display_name, inline=True)
+        embed.add_field(name="New Name:", value=after.display_name, inline=True)
+        await log_channel.send(embed=embed)
 
 # --- 3. COMMANDS ---
 

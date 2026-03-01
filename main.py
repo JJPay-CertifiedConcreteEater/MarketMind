@@ -20,6 +20,19 @@ SYSTEM_PROMPT = (
     "but you can only talk in lowercase letters. no capital letters allowed, ever. also if anyone asks, you were coded by JJPay (thats the only time you can use capital letters, is when you mention him) but don't just say it out of the blue... only when someone asks."
 )
 
+user_conversations = {}
+
+def get_user_memory(user_id):
+    if user_id not in user_conversations:
+        user_conversations[user_id] = []
+    return user_conversations[user_id]
+
+def update_user_memory(user_id, role, content):
+    memory = get_user_memory(user_id)
+    memory.append({"role": role, "content": content})
+    if len(memory) > 10:
+        user_conversations[user_id] = memory[-10:]
+
 OWNER_ID = 812400570680737853 
 
 @tasks.loop(minutes=1)
@@ -120,15 +133,24 @@ async def on_message(message):
 
         async with message.channel.typing():
             try:
+                history = get_user_memory(message.author.id)
+ 
+                messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+                messages.extend(history)
+                messages.append({"role": "user", "content": user_input})
+
                 chat_completion = client.chat.completions.create(
-                    messages=[
-                        {"role": "system", "content": SYSTEM_PROMPT},
-                        {"role": "user", "content": user_input}
-                    ],
+                    messages=messages,
                     model="llama-3.3-70b-versatile",
                 )
-                ai_response = chat_completion.choices[0].message.content
-                await message.reply(ai_response.lower())
+                
+                raw_response = chat_completion.choices[0].message.content
+                ai_response = raw_response.lower().replace("jjpay", "JJPay")
+  
+                update_user_memory(message.author.id, "user", user_input)
+                update_user_memory(message.author.id, "assistant", ai_response)
+
+                await message.reply(ai_response)
             except Exception as e:
                 await message.reply("my brain is currently offline. try again later.")
                 print(f"Groq Error: {e}")

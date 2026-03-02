@@ -325,10 +325,21 @@ async def deletecmd(ctx, name: str):
 async def verified(ctx, member: discord.Member):
     u_role = ctx.guild.get_role(1472996575532814571)
     v_role = ctx.guild.get_role(1472995242335801364)
+    m_role = ctx.guild.get_role(1477811748944744479)
     try:
         if u_role in member.roles: await member.remove_roles(u_role)
         await member.add_roles(v_role)
+        await member.add_roles(m_role)
         await ctx.send(f"✅ **{member.display_name}** is now a verified member of Marketpro Lounge!")
+    except Exception as e: await ctx.send(f"❌ Error: {e}")
+
+@bot.command()
+@commands.has_any_role("MODERATOR", "Jr. Assistant", "Assistant", "Jr. MODERATOR")
+async def rmmarketpings(ctx, member: discord.Member):
+    m_role = ctx.guild.get_role(1477811748944744479)
+    try:
+        if m_role in member.roles: await member.remove_roles(m_role)
+        await ctx.send(f"**{member.display_name}** now will NOT recieve a notification when a marketing tip is posted.")
     except Exception as e: await ctx.send(f"❌ Error: {e}")
 
 @bot.command()

@@ -347,7 +347,7 @@ async def verified(ctx, member: discord.Member):
         await member.add_roles(v_role)
         await member.add_roles(m_role)
         await ctx.send(f"✅ **{member.display_name}** is now a verified member of Marketpro Lounge! They will recieve pings every time a marketing tip is posted, they will have to ask for it to be removed if they do not won't pings.")
-    except Exception as e: await ctx.send(f"❌ Error: {e})"
+    except Exception as e: await ctx.send(f"❌ Error: {e}")
 
 @bot.command()
 @commands.has_any_role("MODERATOR", "Jr. Assistant", "Assistant", "Jr. MODERATOR")

@@ -122,6 +122,22 @@ async def on_member_join(member):
     except: pass
 
 @bot.event
+async def on_member_remove(member):
+    log_channel = bot.get_channel(1477664682599776418) 
+    
+    if log_channel:
+        embed = discord.Embed(
+            title="🏃 Member Left",
+            description=f"**{member.name}** has left the server.",
+            color=discord.Color.red()
+        )
+        embed.set_thumbnail(url=member.display_avatar.url)
+        embed.add_field(name="Account Created", value=member.created_at.strftime("%b %d, %Y"))
+        embed.set_footer(text=f"ID: {member.id}")
+        
+        await log_channel.send(embed=embed)
+
+@bot.event
 async def on_message(message):
     if message.author.bot: return
 

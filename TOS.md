@@ -1,5 +1,5 @@
-TERMS OF SERVICE AGREEMENT
-By using the Bot, the User agrees to be bound by the terms of this Agreement. If the User does NOT agree to the terms of this Agreement, they should immediately discontinue use of the Bot.
+# TERMS OF SERVICE AGREEMENT
+### By using the Bot, the User agrees to be bound by the terms of this Agreement. If the User does NOT agree to the terms of this Agreement, they should immediately discontinue use of the Bot.
 
 1. Use of the Bot: The Bot Owner grants the User a non-exclusive, non-transferable, limited license to use the Bot for personal or non-commercial purposes.
 2. Prohibited Use: The User may not use the Bot in any way that violates applicable laws, rules, or regulations or infringes upon the rights of any third party. The User may not use the Bot for any commercial purposes without the express written consent of the Bot Owner. This includes forks of any and all files of the Bot.
@@ -11,4 +11,4 @@ By using the Bot, the User agrees to be bound by the terms of this Agreement. If
 8. Governing Law: This Agreement shall be governed by and construed in accordance with the laws of North Carolina, U.S. Any dispute arising under or in connection with this Agreement shall be resolved by rules within a Small Claims Court.
 9. Entire Agreement: This Agreement constitutes the entire agreement between the parties and supersedes all prior or contemporaneous agreements or representations, whether written or oral, relating to the Bot.
 
-By using the Bot, the User acknowledges that they have read this Agreement, understand it, and agree to be bound by its terms and conditions.
+### By using the Bot, the User acknowledges that they have read this Agreement, understand it, and agree to be bound by its terms and conditions.

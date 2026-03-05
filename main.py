@@ -346,7 +346,7 @@ async def verified(ctx, member: discord.Member):
         if u_role in member.roles: await member.remove_roles(u_role)
         await member.add_roles(v_role)
         await member.add_roles(m_role)
-        await ctx.send(f"✅ **{member.display_name}** is now a verified member of Marketpro Lounge! They will recieve pings every time a marketing tip is posted, they will have to ask for it to be removed if they do not won't pings.")
+        await ctx.send(f"✅ **{member.display_name}** is now a verified member of Marketpro Lounge! They will recieve pings every time a marketing tip is posted, they will have to ask for it to be removed if they do not want pings. \nWe also recommend reading the bot's [Terms of Service](https://github.com/JJPay-CertifiedConcreteEater/MarketMind/blob/main/TOS.md) and [Privacy Policy](https://github.com/JJPay-CertifiedConcreteEater/MarketMind/blob/main/PRIVACY.md). EVEN IF THEY DON'T, BY STAYING IN THE SERVER WITH THE BOT THEY AUTOMATICALLY AGREE TO IT!")
     except Exception as e: await ctx.send(f"❌ Error: {e}")
 
 @bot.command()

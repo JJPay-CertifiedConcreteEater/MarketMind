@@ -351,6 +351,21 @@ async def verified(ctx, member: discord.Member):
 
 @bot.command()
 @commands.has_any_role("MODERATOR", "Jr. Assistant", "Assistant", "Jr. MODERATOR")
+async def birthday(ctx, member: discord.Member):
+    b_role = ctx.guild.get_role(1478548358070009856)
+    try:
+        await member.add_roles(b_role)
+        await ctx.send(f"Happy Birthday {member.mention}! Here's to senior citizen's discounts 🥂!")
+
+        wait_time = 16 * 60 * 60 
+
+        await asyncio.sleep(wait_time)
+
+        await member.remove_roles(role)
+        print(f"Looks like {member.display_name} isn't born anymore so birthday role is removed.")
+
+@bot.command()
+@commands.has_any_role("MODERATOR", "Jr. Assistant", "Assistant", "Jr. MODERATOR")
 async def rmmarketpings(ctx, member: discord.Member):
     m_role = ctx.guild.get_role(1477811748944744479)
     try:

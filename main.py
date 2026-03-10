@@ -448,7 +448,7 @@ async def kick(ctx, member: discord.Member = None, *, reason="No reason provided
 
 @bot.command()
 @commands.has_permissions(ban_members=True)
-async def ban(ctx, member: discord.Member, *, reason="No reason provided"):
+async def yeet(ctx, member: discord.Member, *, reason="No reason provided"):
     ban_messages = [
         f"{member} is now b&. 👍",
         f"{member} has been thrown into the sun. 👍",

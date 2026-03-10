@@ -1,4 +1,5 @@
 import discord
+import random
 from discord.ext import commands
 from datetime import timedelta
 import json
@@ -442,17 +443,38 @@ async def kick(ctx, member: discord.Member = None, *, reason="No reason provided
     if not member: return
     try:
         await member.kick(reason=reason)
-        await ctx.send(f"**{member.name}** has been kicked to Mars. Say hi to Elongated Muskrat for me")
+        await ctx.send(f"**{member.name}** has been kicked to Hawaii in 1941.")
     except Exception as e: await ctx.send(f"❌ Error: {e}")
 
 @bot.command()
 @commands.has_permissions(ban_members=True)
-async def ban(ctx, member: discord.Member = None, *, reason="No reason provided"):
-    if not member: return
+async def ban(ctx, member: discord.Member, *, reason="No reason provided"):
+    ban_messages = [
+        f"{member} is now b&. 👍",
+        f"{member} has been thrown into the sun. 👍",
+        f"{member} is now heren't. 👍",
+        f"{member} has been shown the door. 👍",
+        f"{member} has applied their head to their local wall at a fast velocity and went to another place. 👍",
+        f"{member} has been 'you are an idiot'ed. 👍",
+        f"{member} has been sent to White Sands, New Mexico in 1945. Say hi to Oppenheimer for me. 👍",
+        f"{member} has been sent to Mars. Say hi to Elongated Muskrat for me. 👍",
+        f"{member} has encountered an error, and needs to close. 👍",
+        f"{member} is not responding, and has been terminated. 👍",
+        f"{member} has been `sudo rm -rf / --no-preserve-root`ed. 👍",
+        f"{member} has been defenestrated. 👍",
+        f"{member} was ejected, and was An Impostor. 👍",
+        f"{member} has been sent to the USSR. 👍",
+        f"{member} > /dev/null 2>&1 👍",
+        f"{member} has been 360 noscoped on Rust. 👍"
+    ]
+
+    selected_message = random.choice(ban_messages)
+
     try:
         await member.ban(reason=reason)
-        await ctx.send(f"🔨 **{member.name}** has been `sudo rm -rf / --no-preserve-root`ed and has been thrown into the void")
-    except Exception as e: await ctx.send(f"❌ Error: {e}")
+        await ctx.send(selected_message)
+    except Exception as e:
+        await ctx.send(f"yeet could not be yeeted; {e}")
 
 @bot.command()
 async def restart(ctx):

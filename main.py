@@ -368,6 +368,13 @@ async def birthday(ctx, member: discord.Member):
         print(f"Error: {e}")
 
 @bot.command()
+@commands.has_permissions(manage_roles=True)
+async def nomorebday(ctx, member: discord.Member):
+    b_role = ctx.guild.get_role(1478548358070009856)
+    await member.remove_roles(b_role)
+    await ctx.send(f"🚫 Early removal: {member.display_name} is not borned earlier.")
+
+@bot.command()
 @commands.has_any_role("MODERATOR", "Jr. Assistant", "Assistant", "Jr. MODERATOR")
 async def rmmarketpings(ctx, member: discord.Member):
     m_role = ctx.guild.get_role(1477811748944744479)

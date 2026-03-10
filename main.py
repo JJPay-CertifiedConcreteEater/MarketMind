@@ -364,6 +364,9 @@ async def birthday(ctx, member: discord.Member):
         await member.remove_roles(role)
         print(f"Looks like {member.display_name} isn't born anymore so birthday role is removed.")
 
+    except Exception as e:
+        print(f"Error: {e}")
+
 @bot.command()
 @commands.has_any_role("MODERATOR", "Jr. Assistant", "Assistant", "Jr. MODERATOR")
 async def rmmarketpings(ctx, member: discord.Member):

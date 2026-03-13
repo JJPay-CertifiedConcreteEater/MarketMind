@@ -356,7 +356,7 @@ async def birthday(ctx, member: discord.Member):
     b_role = ctx.guild.get_role(1478548358070009856)
     try:
         await member.add_roles(b_role)
-        await ctx.send(f"Happy Birthday {member.mention}! Here's to senior citizen's discounts 🥂!")
+        await ctx.send(f"Happy Birthday {member.mention}! Here's to [senior citizen's discounts](https://tenor.com/view/senior-discount-betty-white-cheers-senior-getting-old-gif-610265632820900436) 🥂!")
 
         wait_time = 16 * 60 * 60 
 

@@ -321,7 +321,7 @@ async def _list_commands(ctx):
     await ctx.send(embed=embed)
 
 @bot.command()
-@commands.has_any_role("MODERATOR", "Bot Trusted")
+@commands.has_any_role("MODERATOR", "Jr. MODERATOR", "Assistant", "Jr. Assistant")
 async def say(ctx, target_channel: discord.TextChannel = None, *, message: str):
     await ctx.message.delete()
     destination = target_channel if target_channel else ctx.channel
@@ -329,7 +329,7 @@ async def say(ctx, target_channel: discord.TextChannel = None, *, message: str):
     await destination.send(message)
 
 @bot.command()
-@commands.has_any_role("MODERATOR", "Bot Trusted")
+@commands.has_any_role("MODERATOR", "Jr. MODERATOR", "Assistant", "Jr. Assistant")
 async def deletecmd(ctx, name: str):
     name = name.lower()
     if name in custom_commands:
@@ -484,7 +484,7 @@ async def restart(ctx):
     os.system("pkill -9 python3")
 
 @bot.command()
-@commands.has_any_role("MODERATOR", "Jr. MODERATOR", "Bot Trusted")
+@commands.has_any_role("MODERATOR", "Jr. MODERATOR", "Assistant", "Jr. Assistant", "Bot Trusted")
 async def make(ctx, *, content: str):
     if ";" not in content: return
     n, r = content.split(";", 1)

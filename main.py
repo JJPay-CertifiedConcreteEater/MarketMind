@@ -524,6 +524,7 @@ async def no(ctx):
     ]
 
     selected_message = random.choice(no_messages)
+    await ctx.send(selected_message)
 
 @bot.command()
 async def restart(ctx):

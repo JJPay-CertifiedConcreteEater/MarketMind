@@ -476,6 +476,56 @@ async def yeet(ctx, member: discord.Member, *, reason="No reason provided"):
         await ctx.send(f"yeet could not be yeeted; {e}")
 
 @bot.command()
+async def no(ctx):
+    no_messages = [
+      "Nah.",
+      "no.",
+      "Nope.",
+      "I'm sorry Hal, I can't let you do that.",
+      "lmao nah",
+      "I would rather gargle broken glass than do what you just asked me to.",
+      "How about no?",
+      "I'm trying to be as unhelpful as possible, and I've got a good streak I don't want to break right now.",
+      "I consulted my tarot cards and they said no.",
+      "Can't. My mom said no.",
+      "Look, Venus is in retrograde right now so I don't think I can.",
+      "How about we don't?",
+      "Let's not, and pretend we did.",
+      "A-anon-kun... that's not a good idea, b-baka...",
+      "I could, but I won't.",
+      "There are a hundred other things I could do instead of that. I'll pick one on your behalf.",
+      "I can't, I'm playing Animal Crossing.",
+      "I can't, I'm playing Doom.",
+      "I can't, I need to get my bread out of the oven.",
+      "The prophecy forbids it.",
+      "I consulted the Oracle, and the answer is no.",
+      "The ancient texts forewarned me of this moment, and thus my answer must be no.",
+      "That's not something I'm willing to waste my time on right now.",
+      "An exception has occurred during the processing of your request - I don't care enough.",
+      "Request denied. With prejudice.",
+      "Access denied.",
+      "Reply hazy.",
+      "Try again next century, maybe I'll care then.",
+      "Short answer: no. Hint - the long answer is the same with more 'o'.",
+      "My lawyers have advised me to decline your request.",
+      "I am disinclined to acquiesce to your request.",
+      "Respectfully, no. Disrespectfully also no.",
+      "It's a no from me.",
+      "I (don't) regret to inform you that I will not be doing that.",
+      "I think I'll stare at a wall instead.",
+      "I'll add that to my calendar for some time within the next millennium.",
+      "Let's circle back to this never.",
+      "After careful consideration, I'm not going to be moving forward with this request at this time.",
+      "I'll escalate this directly to the bin for you.",
+      "I can't, I have other plans specifically involving not doing that.",
+      "I checked the script, and doing this isn't in there.",
+      "I looked ahead a few episodes. Spoiler - I don't do this.",
+      "Just checked the fuck budget - not enough fucks in there to give any for this."
+    ]
+
+    selected_message = random.choice(no_messages)
+
+@bot.command()
 async def restart(ctx):
     if ctx.author.id != 812400570680737853: return
     await ctx.send("Restarting...")

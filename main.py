@@ -491,7 +491,6 @@ async def no(ctx):
       "Look, Venus is in retrograde right now so I don't think I can.",
       "How about we don't?",
       "Let's not, and pretend we did.",
-      "A-anon-kun... that's not a good idea, b-baka...",
       "I could, but I won't.",
       "There are a hundred other things I could do instead of that. I'll pick one on your behalf.",
       "I can't, I'm playing Animal Crossing.",
@@ -520,7 +519,6 @@ async def no(ctx):
       "I can't, I have other plans specifically involving not doing that.",
       "I checked the script, and doing this isn't in there.",
       "I looked ahead a few episodes. Spoiler - I don't do this.",
-      "Just checked the fuck budget - not enough fucks in there to give any for this."
     ]
 
     selected_message = random.choice(no_messages)

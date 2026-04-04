@@ -177,7 +177,7 @@ async def on_message(message):
 
     BAIT_CHANNEL_ID = 1475630628144808068
     JAIL_ROLE_ID = 1475967331879616532
-    APPEAL_CHANNEL_ID = 1475967694971994112
+    APPEAL_CHANNEL_ID = 1489964107808636978
     
     if message.channel.id == BAIT_CHANNEL_ID and message.author.id != OWNER_ID:
         try:
@@ -385,52 +385,65 @@ async def rmmarketpings(ctx, member: discord.Member):
 
 @bot.command()
 @commands.has_any_role("MODERATOR", "Jr. Assistant", "Assistant", "Jr. MODERATOR")
-async def warn(ctx, member: discord.Member):
-    w_role = ctx.guild.get_role(1475171888513679441)
-    try:
-        await member.add_roles(w_role)
-        await ctx.send(f"✅ **{member.display_name}** has been warned.")
-    except Exception as e: await ctx.send(f"❌ Error: {e}")
-
-@bot.command()
-@commands.has_any_role("MODERATOR", "Jr. Assistant", "Assistant", "Jr. MODERATOR")
 async def unwarn(ctx, member: discord.Member):
     w_role = ctx.guild.get_role(1475171888513679441)
     try:
         if w_role in member.roles: await member.remove_roles(w_role)
         await ctx.send(f"✅ **{member.display_name}** has been unwarned!")
-    except Exception as e: await ctx.send(f"❌ Error: {e}")
+
+@bot.command()
+@commands.has_any_role("MODERATOR", "Jr. Assistant", "Assistant", "Jr. MODERATOR")
+async def warn(ctx, member: discord.Member, *, reason="No reason provided"):
+    w_role = ctx.guild.get_role(1475171888513679441)
+    APPEAL_CHANNEL_ID = 1489964107808636978
+    
+    try:
+        await member.add_roles(w_role)
+        await ctx.send(f"✅ **{member.display_name}** has been warned for: **{reason}**")
+
+        appeal_channel = bot.get_channel(APPEAL_CHANNEL_ID)
+        if appeal_channel:
+            await appeal_channel.send(
+                f"⚠️ {member.mention}, you have been warned in this server for **{reason}**. "
+                "This is your chance to appeal before a punishment takes place. "
+                "You can either appeal here or reply to the DM sent. **IF YOU DO NOT APPEAL SOON, YOUR PUNISHMENT WILL TAKEPLACE!**"
+            )
+    except Exception as e: 
+        await ctx.send(f"❌ Error: {e}")
 
 @bot.command()
 @commands.has_any_role("MODERATOR", "Jr. MODERATOR")
-async def blacklist(ctx, member: discord.Member):
+async def blacklist(ctx, member: discord.Member, *, reason="No reason provided"):
     j_role = ctx.guild.get_role(1475967331879616532)
-    APPEAL_CHANNEL_ID = 1475967694971994112
+    APPEAL_CHANNEL_ID = 1489964107808636978
+    
     try:
         await member.add_roles(j_role)
         await ctx.send(f"✅ **{member.display_name}** has been locked to the appeals channel.")
         
         try:
             await member.send(
-                f"⚠️ Hey there, this DM is to let you know you have been blacklisted in Marketpro Lounge. "
+                f"⚠️ Hey there, this DM is to let you know you have been blacklisted in Marketpro Lounge for **{reason}**. "
                 "You have been locked to the appeals channel. This is your chance to appeal before a punishment takes place.\n"
                 "Reply to this DM or post in the #appeals channel. **IF YOU DO NOT APPEAL SOON, YOUR PUNISHMENT WILL TAKE PLACE!**"
             )
         except:
-            pass
+            await ctx.send("ℹ️ Could not DM user (DMs closed or some other issue).")
 
         appeal_channel = bot.get_channel(APPEAL_CHANNEL_ID)
         if appeal_channel:
             await appeal_channel.send(
-                f"⚠️ {member.mention}, you have been blacklisted and have been locked to the appeals channel. This is your chance to appeal before a punishment takes place. "
+                f"⚠️ {member.mention}, you have been blacklisted for **{reason}**. "
+                "This is your chance to appeal before a punishment takes place. "
                 "You can either appeal here or reply to the DM sent. **IF YOU DO NOT APPEAL SOON, YOUR PUNISHMENT WILL TAKE PLACE!**"
             )
-    except Exception as e: await ctx.send(f"❌ Error: {e}")
+    except Exception as e: 
+        await ctx.send(f"❌ Error: {e}")
 
 @bot.command()
 @commands.has_any_role("MODERATOR", "Assistant", "Jr. MODERATOR")
 async def timeout(ctx, member: discord.Member, minutes: int, *, reason: str = "No reason provided"):
-    if minutes > 40320: return await ctx.send("Limit is 28 days.")
+    if minutes > 40320: return await ctx.send("Limit is 28 days L bozo.")
     try:
         await member.timeout(timedelta(minutes=minutes), reason=reason)
         await ctx.send(f"**{member.display_name}** has ran into an issue and will restart in {minutes}m.")
@@ -442,7 +455,7 @@ async def kick(ctx, member: discord.Member = None, *, reason="No reason provided
     if not member: return
     try:
         await member.kick(reason=reason)
-        await ctx.send(f"**{member.name}** has been kicked to Hawaii in 1941.")
+        await ctx.send(f"**{member.name}** has been kicked to Pearl Harbor, Hawaii on December 7th, 1941.")
     except Exception as e: await ctx.send(f"❌ Error: {e}")
 
 @bot.command()
